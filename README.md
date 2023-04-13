@@ -50,3 +50,5 @@ poetry run python3 index.py
 2022/11/28 Release v1.0.0
 
 2022/12/18 Update 埋め込みリンクの送信 v1.1.0
+
+2023/04/13 Update Poetryとdotenvへの対応 v1.1.1
