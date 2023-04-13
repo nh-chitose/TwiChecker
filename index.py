@@ -9,8 +9,8 @@ load_dotenv()
 client = discord.Bot()
 
 # Checker関数の定義
-def checker(id):
-  api_url = "https://api.twitter.com/2/users/by/username/" + id
+def checker(twId):
+  api_url = "https://api.twitter.com/2/users/by/username/" + twId
   # Twitterのベアラートークン
   tToken = os.getenv("TWITTER_TOKEN")
   # 取得する情報を指定
@@ -50,20 +50,21 @@ async def on_ready():
 @client.slash_command(description="Twitter IDが有効かどうかチェックします。")
 async def twicheck(
   ctx: discord.ApplicationContext,
-  id: discord.Option(str, description="確認したいIDを入力してください。", required=True, min_length=1, max_length=15)
+  twitterid: discord.Option(str, description="確認したいIDを入力してください。",
+                     required=True, min_length=1, max_length=15)
 ):
   # 変数mをこのスコープで使うために空で定義
   m = ""
   # checker関数の戻り値にデータがある場合の条件分岐
-  if checker(id):
+  if checker(twitterid):
   # checker関数の戻り値を変数userに格納
-    user = checker(id)
+    user = checker(twitterid)
     # 返信の内容(ID、ユーザ名)を代入
     embed = discord.Embed(
       title=user["name"],
       description=user["description"],
       color=2105893,
-      timestamp=datetime.strptime((user["created_at"]), "%Y-%m-%dT%H:%M:%S.%f%z"))     
+      timestamp=datetime.strptime((user["created_at"]), "%Y-%m-%dT%H:%M:%S.%f%z"))
     embed.set_author(name=user["username"])
     embed.set_thumbnail(url=user["profile_image_url"])
 
@@ -79,7 +80,7 @@ async def twicheck(
     await ctx.respond(m)
 
 dToken = os.getenv("DISCORD_TOKEN")
-try: 
+try:
   client.run(dToken)
 except TypeError:
   print("Invalid Discord Token.")
