@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  push:
+    branches: 
+      - master
+    paths-ignore:
+      - .env.sample
+      - .gitignore
+      - config.json.sample
+      - LICENSE
+      - README.md
+      - .github/**
+      - .vscode/**
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.10", "3.11"]
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pylint
+    - name: Analysing the code with pylint
+      run: |
+        pylint $(git ls-files '*.py')
+
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.10", "3.11"]
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install poetry
+        poetry install
+    - name: Runs index.py
+      run: |
+        poetry run python3 index.py
+      
+  success-all-test:
+    runs-on: ubuntu-latest
+    if: always()
+    needs:
+      - lint
+      - test
+    steps:
+      - uses: technote-space/workflow-conclusion-action@v3
+      - name: Check failure
+        if: env.WORKFLOW_CONCLUSION == 'failure'
+        run: exit 1
+      
+      - name: Success
+        run: echo "All done"
+        if: ${{ success() }}
