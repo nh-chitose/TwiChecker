@@ -79,4 +79,7 @@ async def twicheck(
     await ctx.respond(m)
 
 dToken = os.getenv("DISCORD_TOKEN")
-client.run(dToken)
+try: 
+  client.run(dToken)
+except TypeError:
+  print("Invalid Discord Token.")
