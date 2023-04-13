@@ -35,17 +35,12 @@ jobs:
       - name: Configure poetry
         run: |
           python -m poetry config virtualenvs.in-project true
-      - name: Cache the virtualenv
-        uses: actions/cache@v2
-        with:
-          path: ./.venv
-          key: ${{ runner.os }}-venv-${{ hashFiles('**/poetry.lock') }}
       - name: Install dependencies
         run: |
           python -m poetry install
       - name: Run tests
         run: |
-          python -m poetry run python -m $(git ls-files '*.py')
+          poetry run python -m $(git ls-files '*.py')
 
   lint:
     runs-on: ubuntu-latest
@@ -66,14 +61,9 @@ jobs:
       - name: Configure poetry
         run: |
           python -m poetry config virtualenvs.in-project true
-      - name: Cache the virtualenv
-        uses: actions/cache@v2
-        with:
-          path: ./.venv
-          key: ${{ runner.os }}-venv-${{ hashFiles('**/poetry.lock') }}
       - name: Install dependencies
         run: |
           python -m poetry install
       - name: Lint with Pylint
         run: |
-         python -m poetry run pylint $(git ls-files '*.py') --rcfile=${{github.action_repository}}/.pylintrc
+          poetry run pylint $(git ls-files '*.py') --rcfile=${{github.action_repository}}/.pylintrc
