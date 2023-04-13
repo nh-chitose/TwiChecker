@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  push:
+    branches: 
+      - master
+    paths-ignore:
+      - .env.sample
+      - .gitignore
+      - config.json.sample
+      - LICENSE
+      - README.md
+      - .github/**
+      - .vscode/**
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.10"]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install poetry
+      run: |
+        curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+        echo "$HOME/.poetry/bin" >> $GITHUB_PATH
+    - name: Poetry Version
+      run: |
+        poetry --version
+    - name: Poetry Install Dependencies
+      run: |
+        poetry install --no-interaction
+    - name: Test with pytest
+      run: |
+        poetry run $(git ls-files '*.py')
+
+  lint:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.10"]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install poetry
+      run: |
+        curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+        echo "$HOME/.poetry/bin" >> $GITHUB_PATH
+    - name: Poetry Version
+      run: |
+        poetry --version
+    - name: Poetry Install Dependencies
+      run: |
+        poetry install --no-interaction
+    - name: Lint with Pylint
+      run: |
+        poetry run pylint $(git ls-files '*.py') --rcfile=${{github.action_repository}}/.pylintrc
