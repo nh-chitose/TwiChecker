@@ -30,10 +30,6 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: cache poetry install
-        uses: actions/cache@v2
-        with:
-          path: ~/.local
-          key: poetry-1.4.2-0
       - uses: snok/install-poetry@v1
         with:
           version: 1.4.2
@@ -47,7 +43,6 @@ jobs:
           key: pydeps-${{ hashFiles('**/poetry.lock') }}
       - run: poetry install --no-interaction --no-root
         if: steps.cache-deps.outputs.cache-hit != 'true'
-      - run: poetry install --no-interaction
       - name: Test with pytest
         run: |
           poetry run python3 $(git ls-files '*.py')
