@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "twichecker"
-version = "1.0.0"
+version = "1.1.1"
 description = "Check Twitter's profile and send that as embed on Discord."
 authors = ["nh-chitose"]
 license = "MIT"
