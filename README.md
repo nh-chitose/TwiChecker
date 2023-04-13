@@ -5,8 +5,10 @@
 [![CI](https://github.com/nh-chitose/TwiChecker/actions/workflows/test.yml/badge.svg)](https://github.com/nh-chitose/TwiChecker/actions/workflows/test.yml)
 ![GitHub](https://img.shields.io/github/license/nh-chitose/TwiChecker)
 
-
 ツイッターのプロフィールをスラッシュコマンドでDiscord上で簡単に取得できるボットです。
+
+## 使用例
+![使用例](https://github.com/nh-chitose/TwiChecker/blob/master/example.png)
 
 ## 必要な権限
 ☑ メッセージを送信
