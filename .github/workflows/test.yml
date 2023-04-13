@@ -38,7 +38,7 @@ jobs:
           poetry install --no-interaction
       - name: Test with pytest
         run: |
-          poetry run $(git ls-files '*.py')
+          poetry run python3 $(git ls-files '*.py')
 
   lint:
     runs-on: ubuntu-latest
