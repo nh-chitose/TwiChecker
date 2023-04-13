@@ -66,4 +66,4 @@ jobs:
           python -m poetry install
       - name: Lint with Pylint
         run: |
-          poetry run pylint $(git ls-files '*.py') --rcfile=${{github.action_repository}}/.pylintrc
+          poetry run pylint $(git ls-files '*.py')
