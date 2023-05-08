@@ -14,7 +14,7 @@ requests = "^2.29.0"
 typing-extensions = "^4.5.0"
 
 [tool.poetry.group.dev.dependencies]
-pylint = "^2.17.3"
+pylint = "^2.17.4"
 isort = "^5.12.0"
 
 [build-system]
